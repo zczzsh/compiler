@@ -1,0 +1,22 @@
+int max(int x, int y) {
+    if ((x(int) + y(int))) { // 2:8 ***ERROR*** Non-bool expression used as an if condition
+        return x(int);
+    }
+    else {
+        return y(int);
+    }
+}
+
+void main() {
+    int a;
+    bool b;
+    int m;
+    cout << "a: ";
+    cin >> a(int);
+    cout << "b: ";
+    cin >> b(bool);
+    m(int) = max(int,int->int)(a(int), b(bool)); // 20:13 ***ERROR*** Type of actual does not match type of formal
+    cout << "the maximum is ";
+    cout << m(int);
+}
+

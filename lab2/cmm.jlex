@@ -1,0 +1,409 @@
+// This part is added as-it-is on top of the generated scanner
+//
+
+import java_cup.runtime.*; // defines the Symbol class
+
+// The generated scanner will return a Symbol for each token that it finds.
+// A Symbol contains an Object field named value; that field will be of type
+// TokenVal, defined below.
+//
+// A TokenVal object contains the line number on which the token occurs as
+// well as the number of the character on that line that starts the token.
+// Some tokens (literals and IDs) also include the value of the token.
+
+class TokenVal {
+      // TO BE COMPLETED
+      int linenum;
+      int charPos;
+      TokenVal(int line,int Pos)
+      {
+            this.linenum=line;
+            this.charPos=Pos;
+      }
+}
+
+class IntLitTokenVal extends TokenVal {
+      // TO BE COMPLETED
+      int intVal;
+      IntLitTokenVal(int line,int Pos,int val)
+      {
+           super(line,Pos);
+           this.intVal=val;
+      }
+}
+
+class IdTokenVal extends TokenVal {
+      // TO BE COMPLETED   
+      String idVal;
+      IdTokenVal(int line,int Pos,String val)
+      {
+           super(line,Pos);
+           this.idVal=val;
+      }
+}
+
+class StrLitTokenVal extends TokenVal {
+      // TO BE COMPLETED
+      String strVal;
+      StrLitTokenVal(int line,int Pos,String val)
+      {
+           super(line,Pos);
+           this.strVal=val;
+      }
+}
+
+// The following class is used to keep track of the character number at which
+// the current token starts on its line.
+class CharNum {
+    static int num=1;
+}
+%%
+
+DIGIT=        [0-9]
+WHITESPACE=   [\040\t]
+LETTER=       [a-zA-Z]
+SLASHN=       \n
+DOUBLEQUOTE=  \"
+ACCEPTED=     [nt\?'\"\\] 
+NOTAC=        [^nt\n\?'\"\\]
+
+%implements java_cup.runtime.Scanner
+%function next_token
+%type java_cup.runtime.Symbol
+
+%eofval{
+return new Symbol(sym.EOF);
+%eofval}
+
+%line
+
+%%
+
+"bool"
+{
+      int temp= CharNum.num;
+      CharNum.num+=4; 
+      return new Symbol(sym.BOOL,new TokenVal(yyline+1,temp));
+}
+
+"int"
+{
+      int temp= CharNum.num;
+      CharNum.num+=3; 
+      return new Symbol(sym.INT,new TokenVal(yyline+1,temp));
+}
+
+"void"
+{
+      int temp= CharNum.num;
+      CharNum.num+=4; 
+      return new Symbol(sym.VOID,new TokenVal(yyline+1,temp));
+}
+
+"true"
+{
+      int temp= CharNum.num;
+      CharNum.num+=4; 
+      return new Symbol(sym.TRUE,new TokenVal(yyline+1,temp));
+}
+
+"false"
+{
+      int temp= CharNum.num;
+      CharNum.num+=5; 
+      return new Symbol(sym.FALSE,new TokenVal(yyline+1,temp));
+}
+
+"struct"
+{
+      int temp= CharNum.num;
+      CharNum.num+=6; 
+      return new Symbol(sym.STRUCT,new TokenVal(yyline+1,temp));
+}
+
+"cin"
+{
+      int temp= CharNum.num;
+      CharNum.num+=3; 
+      return new Symbol(sym.CIN,new TokenVal(yyline+1,temp));
+}
+
+"cout"
+{
+      int temp= CharNum.num;
+      CharNum.num+=4; 
+      return new Symbol(sym.COUT,new TokenVal(yyline+1,temp));
+}
+
+"if"
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.IF,new TokenVal(yyline+1,temp));
+}
+
+"else"
+{
+      int temp= CharNum.num;
+      CharNum.num+=4; 
+      return new Symbol(sym.ELSE,new TokenVal(yyline+1,temp));
+}
+
+"while"
+{
+      int temp= CharNum.num;
+      CharNum.num+=5; 
+      return new Symbol(sym.WHILE,new TokenVal(yyline+1,temp));
+}
+
+"return"
+{
+      int temp= CharNum.num;
+      CharNum.num+=6; 
+      return new Symbol(sym.RETURN,new TokenVal(yyline+1,temp));
+}
+
+({LETTER}|"_")({DIGIT}|{LETTER}|"_")* 
+{
+      int temp= CharNum.num;
+      CharNum.num+=yytext().length(); 
+      return new Symbol(sym.ID,new IdTokenVal(yyline+1,temp,yytext()));
+}
+
+{DIGIT}+ 
+{
+      int temp= CharNum.num;
+      CharNum.num+=yytext().length(); 
+      long val = new Long(yytext()).longValue();
+      if(val > Integer.MAX_VALUE){
+            System.out.println("Integer literal too large" + "[" + (yyline+1) + ":" + temp + "]: "+ yytext());
+            return new Symbol(sym.INTLITERAL, new IntLitTokenVal(yyline+1,temp,Integer.MAX_VALUE));
+      }
+      else{
+            return new Symbol(sym.INTLITERAL, new IntLitTokenVal(yyline+1,temp,(new Integer(yytext()).intValue())));
+      }
+}
+
+("//"|"#")(.)* 
+{
+      CharNum.num+=yytext().length();
+}
+
+(\")(\\{ACCEPTED}|[^\n\\\"])*(\")
+{
+      int temp= CharNum.num; 
+      CharNum.num+=yytext().length(); 
+      return new Symbol(sym.STRINGLITERAL,new StrLitTokenVal(yyline+1,temp,yytext()));
+}
+
+\n   
+{
+      CharNum.num=1;
+}
+
+{WHITESPACE}* 
+{
+      CharNum.num+=yytext().length();
+}
+
+
+"{"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.LCURLY,new TokenVal(yyline+1,temp));
+}
+
+"}"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.RCURLY,new TokenVal(yyline+1,temp));
+}
+
+"("  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.LPAREN,new TokenVal(yyline+1,temp));
+}
+
+")"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.RPAREN,new TokenVal(yyline+1,temp));
+}
+
+";"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.SEMICOLON,new TokenVal(yyline+1,temp));
+}
+
+","  
+{
+      int temp= CharNum.num;
+      CharNum.num++;
+      return new Symbol(sym.COMMA,new TokenVal(yyline+1,temp));
+}
+
+"."  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.DOT,new TokenVal(yyline+1,temp));
+}
+
+"<<" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.WRITE,new TokenVal(yyline+1,temp));
+}
+
+">>" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.READ,new TokenVal(yyline+1,temp));
+}
+
+"++" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.PLUSPLUS,new TokenVal(yyline+1,temp));
+}
+
+"--" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.MINUSMINUS,new TokenVal(yyline+1,temp));
+}
+
+"+"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.PLUS,new TokenVal(yyline+1,temp));
+}
+
+"-"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.MINUS,new TokenVal(yyline+1,temp));
+}
+
+"*"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.TIMES,new TokenVal(yyline+1,temp));
+}
+
+"/"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.DIVIDE,new TokenVal(yyline+1,temp));
+}
+
+"!"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.NOT,new TokenVal(yyline+1,temp));
+}
+
+"&&" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.AND,new TokenVal(yyline+1,temp));
+}
+
+"||" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.OR,new TokenVal(yyline+1,temp));
+}
+
+"==" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.EQUALS,new TokenVal(yyline+1,temp));
+}
+
+"!=" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.NOTEQUALS,new TokenVal(yyline+1,temp));
+}
+
+"<"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.LESS,new TokenVal(yyline+1,temp));
+}
+
+">"  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.GREATER,new TokenVal(yyline+1,temp));
+}
+
+"<=" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.LESSEQ,new TokenVal(yyline+1,temp));
+}
+
+">=" 
+{
+      int temp= CharNum.num;
+      CharNum.num+=2; 
+      return new Symbol(sym.GREATEREQ,new TokenVal(yyline+1,temp));
+}
+
+"="  
+{
+      int temp= CharNum.num;
+      CharNum.num++; 
+      return new Symbol(sym.ASSIGN,new TokenVal(yyline+1,temp));
+}
+
+
+(\")((\\{ACCEPTED})|[^\n\\\"])*({SLASHN}|\Eof)
+{
+      CharNum.num+=yytext().length();
+      System.out.println("unterminated string literal ignored and ignore the unterminated string literal" + yytext());
+}
+
+(\")((\\{ACCEPTED})|[^\n\\\"])*(\\{NOTAC})+((\\{ACCEPTED})|[^\n\\\"])*(\")
+{
+      CharNum.num+=yytext().length();
+      System.out.println("string literal with bad escaped character ignored and ignore the string literal." + yytext());
+}
+
+
+(\")[^\n\"]*(\\|\\{NOTAC})+[^\n\"]*({SLASHN}|\Eof)
+{
+      CharNum.num+=yytext().length();
+      System.out.println(" unterminated string literal with bad escaped character ignored, and ignore the bad string literal" + yytext());
+}
+
+(.) 
+{
+      CharNum.num++;
+      System.out.println("illegal character ignored: "+yytext());
+}

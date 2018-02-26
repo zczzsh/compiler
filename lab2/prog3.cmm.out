@@ -1,0 +1,33 @@
+=
+bool
+int
+x
+int
+y
+=
+18
+s
+=
+"abc"
+;
+string
+s2
+=
+"\n"
+;
+string
+s3
+=
+"\t !!!"
+;
+23
+adwer
+""
+"&!88"
+"use \n to denote a newline character"
+"include a quote like this \" and a backslash like this \\"
+cout
+<<
+ld
+;
+abc

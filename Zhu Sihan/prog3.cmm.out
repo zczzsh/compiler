@@ -1,0 +1,13 @@
+int max;
+void main() {
+    int a;
+    int b;
+    max(int) = 100;
+    b(int) = 23;
+    cout << "a: ";
+    cin >> a(int);
+    a(int) = (a(int) + max(int));
+    cout << "a = ";
+    cout << a(int);
+}
+

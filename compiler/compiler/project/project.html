@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+  </head>
+  <body>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <link rel="stylesheet"
+      href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="http://pages.cs.wisc.edu/%7Ecs536-1/asn/p6/js/jquery.min.js"></script>
+    <script src="http://pages.cs.wisc.edu/%7Ecs536-1/asn/p6/js/jquery-ui-1.11.2.custom/jquery-ui.min.js"></script>
+    <script>
+jQuery(document).ready(function ($) {
+		console.log("hello!");
+		accor = $( "#starteraccordion" );
+		console.log(accor);
+		accor.accordion({
+			collapsible: true,
+			heightStyle: "content"
+		});
+  });
+</script>
+    <header>
+    </header>
+    <font face="Helvetica, Arial, sans-serif"></font><!-- space between items -->
+    <h2 id="generalInfo"><font face="Helvetica, Arial, sans-serif">General
+        information</font></h2>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <p><font face="Helvetica, Arial, sans-serif">
+        This project consists in completing the compiler we've been
+        developing through the programming labs by providing (part of)
+        the last step: MIPS code generation. Similar to the assignments
+        5 and 6, the code generator
+        will be implemented by writing <font face="Courier New,
+          Courier, monospace">codeGen</font> member functions for
+        the various kinds of AST nodes.
+        See the lecture notes 6 for useful details.</font>
+    </p>
+    <font face="Helvetica, Arial, sans-serif"></font><font
+      face="Helvetica, Arial, sans-serif">
+    </font>
+    <h2 id="starting"><font face="Helvetica, Arial, sans-serif">Getting
+        started</font></h2>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <p><font face="Helvetica, Arial, sans-serif">
+        Files on which you should build are in the <font face="Courier
+          New, Courier, monospace">project.tar.gz</font> archive file
+        (see below in the supporting files section). This archive
+        contains:<br>
+      </font></p>
+    <ul>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">cmm.jlex:</font> a JLex
+          specification for the C-- language (solution to lab #2). Use
+          this file if there were problems with your JLex specification
+          from lab #2</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">cmm.cup:</font> a Java CUP
+          specification for&nbsp; the C-- language (solution to lab #3).
+          Use this file if there were problems with your cmm.cup
+          specification from&nbsp; lab #3</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">ast.java:</font> this file contains
+          class definitions for the AST structure built by the parser
+          together with name analysis and the type-checker methods&nbsp;
+          (solution to lab #6). Use this file if there were problems
+          with your <font face="Courier New, Courier, monospace">ast.java</font>
+          file from lab #6. You will need to complete this file, mainly
+          by adding the <font face="Courier New, Courier, monospace">codeGen</font>
+          method to most of the classes</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">Type.java:</font> a file for the
+          class <font face="Courier New, Courier, monospace">Type</font>
+          and its sub-classes. These classes are the same as for lab #5.
+          Use this file if there were problems with your <font
+            face="Courier New, Courier, monospace">Type.java</font> file
+          from lab #5</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">SymInfo.java:</font> a file for the
+          class <font face="Courier New, Courier, monospace">SymInfo</font>
+          and its sub-classes (solution to lab #5).&nbsp; Use this file
+          if there were problems with your <font face="Courier New,
+            Courier, monospace">SymInfo</font> class from lab #5. You
+          will need to change this file</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">SymTable.java:</font> a file for
+          the class <font face="Courier New, Courier, monospace">SymTable</font>
+          (solution to lab #4). Use this file if there were problems
+          with your <font face="Courier New, Courier, monospace">SymTable</font>
+          class from lab #4</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">ErrMsg.java:</font>&nbsp; a file
+          for the class <font face="Courier New, Courier, monospace">ErrMsg</font>
+          (solution to lab #5).&nbsp; Use this file if there were
+          problems with your <font face="Courier New, Courier,
+            monospace">ErrMsg</font> class from lab #5</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">SyntaxErrorException.java:</font>&nbsp;
+          same class as for lab #3.&nbsp; You don't need to change this
+          file</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">DuplicateSymException</font> and <font
+            face="Courier New, Courier, monospace">EmptySymTableException:</font>
+          same classes as for lab #4.&nbsp; You don't need to change
+          these files</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">Makefile:</font> a <font
+            face="Courier New, Courier, monospace">Makefile</font> for
+          the project. You need to change this file</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">CodeGen.java:</font> a file for the
+          class <font face="Courier New, Courier, monospace">CodeGen.</font>
+          This class exports useful functions to generate MIPS
+          instructions in an easy and pretty-printed way</font></li>
+      <li><font face="Helvetica, Arial, sans-serif"><font face="Courier
+            New, Courier, monospace">hello.cmm</font> and <font
+            face="Courier New, Courier, monospace">hello.mips:</font> <font
+            face="Courier New, Courier, monospace">hello.cmm</font> is a
+          (very) simple C-- source file and <font face="Courier New,
+            Courier, monospace">hello.mips</font> is the MIPS (compiled)
+          version of this file<br>
+        </font></li>
+    </ul>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <p><font face="Helvetica, Arial, sans-serif">
+        Some useful code-generation methods can be found in the file
+        <font face="Courier New, Courier, monospace">Codegen.java.</font>
+        Note that to use the methods and constants defined in that file
+        you will need to prefix the names with <font face="Courier New,
+          Courier, monospace">Codegen.</font> For example, you would
+        write: <font face="Courier New, Courier, monospace">Codegen.genPop(Codegen.T0)
+        </font>rather than <font face="Courier New, Courier, monospace">genPop(T0)</font>
+        (alternatively, you could put the declarations of the methods
+        and
+        constants in your <font face="Courier New, Courier, monospace">ASTnode</font>
+        class; then you would not need the
+        <font face="Courier New, Courier, monospace">Codegen</font>
+        prefix).
+        Also note that a <font face="Courier New, Courier, monospace">PrintWriter</font>
+        p is declared as a static
+        public field in the <font face="Courier New, Courier,
+          monospace">Codegen</font> class.
+        The code-generation methods in <font face="Courier New,
+          Courier, monospace">Codegen.java</font> all write to <font
+          face="Courier New, Courier, monospace">PrintWriter</font>
+        p, so you should use it when you open the output file
+        in your main program (in <font face="Courier New, Courier,
+          monospace">Main.java</font>)
+        i.e., you should include:
+      </font></p>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <dir>
+      <pre><font size="+1" face="Courier New, Courier, monospace">Codegen.p = new PrintWriter(args[1]);</font></pre>
+    </dir>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <p><font face="Helvetica, Arial, sans-serif">
+        in your main program (or <font face="Courier New, Courier,
+          monospace">ASTnode.p</font> if you put the declarations
+        in the <font face="Courier New, Courier, monospace">ASTnode</font>
+        class).
+        You should also close that <font face="Courier New, Courier,
+          monospace">PrintWriter</font> at the end of the program:
+      </font></p>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <dir>
+      <pre><font size="+1" face="Courier New, Courier, monospace">Codegen.p.close();</font></pre>
+    </dir>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <h2 id="spim"><font face="Helvetica, Arial, sans-serif">SPIM</font></h2>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <p><font face="Helvetica, Arial, sans-serif">
+        The best way to test your MIPS code is using the simulator SPIM.
+        There are two versions of SPIM:
+      </font></p>
+    <ol class="style1">
+      <li><font face="Helvetica, Arial, sans-serif">A command line
+          program, called <b>spim</b>: use this version to run your
+          compiled code
+          with the compiler is done<br>
+        </font></li>
+      <li><font face="Helvetica, Arial, sans-serif">A GUI-driven
+          program, called <b>QtSpim</b>: use this version to test
+          interactively your (generated) MIPS code
+        </font></li>
+    </ol>
+    <h4><font face="Helvetica, Arial, sans-serif">Note</font></h4>
+    <p><font face="Helvetica, Arial, sans-serif">
+        To get the SPIM simulator to correctly recognize your main
+        function and to exit the program gracefully, there are two
+        things you need to do:</font></p>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <ol class="style1">
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">When generating the
+            function preamble for main, add the label "<font
+              face="Courier New, Courier, monospace">__start:</font>" on
+            the line after the label "<font face="Courier New, Courier,
+              monospace">main:</font>" (note that <font face="Courier
+              New, Courier, monospace">__start:</font> contains two
+            underscore characters). SPIM may add the<font face="Courier
+              New, Courier, monospace"> __start:</font> label
+            automatically in the main function's preamble. In that case,
+            it will raise a warning. This is acceptable. However, this
+            should not affect the execution of your code.</font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">When generating the
+            function exit for main, instead of returning using "jr $ra",
+            issue a syscall to exit by doing:</font></p>
+        <dir><font face="Courier New, Courier, monospace">li $v0, 10<br>
+            syscall</font></dir>
+        <p><font face="Helvetica, Arial, sans-serif">(Note that this
+            means that a program that contains a function which calls
+            main won't work correctly, which will be ok for the purposes
+            of this project.)</font></p>
+      </li>
+    </ol>
+    <font face="Helvetica, Arial, sans-serif">
+      You can assume that the <font face="Courier New, Courier,
+        monospace">main</font> function has the signature<font
+        face="Courier New, Courier, monospace"> void main() </font>.
+    </font>
+    <h2 id="codeChanges"><font face="Helvetica, Arial, sans-serif">Changes
+        to your previous code</font></h2>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <h4><font face="Helvetica, Arial, sans-serif">Required changes:</font></h4>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <ol class="style1">
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Add to the name
+            analyzer or type checker (your choice), a check whether the
+            program contains a function named main. If there is no such
+            function, print the error message: "No main function". Use
+            0,0 as the line and character numbers. </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Add a new "offset"
+            field to the <font face="Courier New, Courier, monospace">Sym</font>
+            class (or to the appropriate subclass(es) of <font
+              face="Courier New, Courier, monospace">Sym</font>). Change
+            the name analyzer to compute offsets for each function's
+            parameters and local variables (i.e., where in the
+            function's Activation Record they will be stored at runtime)
+            and to fill in the new offset field. Note that each scalar
+            variable requires 4 bytes of storage. You may find it
+            helpful to verify that you have made this change correctly
+            by modifying your unparser to print each local variable's
+            offset. </font></p>
+      </li>
+      <li><font face="Helvetica, Arial, sans-serif">Define a new Main
+          class </font><font face="Helvetica, Arial, sans-serif">so
+          that, if there are no errors (including type errors),
+          the code generator is called <b>after</b> the type checker.
+          The code generator should write code to
+          the file named by the second command-line argument. </font><font
+          face="Helvetica, Arial, sans-serif">Your main program should
+          no longer call the unparser,
+          nor should it report that the program was parsed successfully.</font></li>
+    </ol>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <h4><font face="Helvetica, Arial, sans-serif">Suggested changes:</font></h4>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <ol class="style1">
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Modify the name
+            analyzer to compute and save the total size of the local
+            variables declared in each function (e.g., in a new field of
+            the function name's symbol-table entry). This will be useful
+            when you do code generation for function entry (to set the
+            SP correctly). </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Either write a
+            method to compute the total size of the formal parameters
+            declared in a function, or modify the name analyzer to
+            compute and store that value (in the function name's
+            symbol-table entry). This will also be useful for code
+            generation for function entry. </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Change the
+            definition of class <font face="Courier New, Courier,
+              monospace">WriteStmtNode</font> to include a (private)
+            field to hold the type of the expression being written, and
+            change your type-check method for the <font face="Courier
+              New, Courier, monospace">WriteStmtNode</font> to fill in
+            that field. This will be useful for code generation for the
+            <i>write</i> statement (since you will need to generate
+            different code depending on the type of the expression being
+            output). </font></p>
+      </li>
+    </ol>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <h3 id="semantics"><font face="Helvetica, Arial, sans-serif">Non-obvious
+        semantic issues</font></h3>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <ol class="style1">
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">All parameters
+            should be passed by value. </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">The <i>and</i> and
+            <i>or</i> operators (&amp;&amp; and ||) are <i>short
+              circuited</i>, just as they are in Java. That means that
+            their right operands are only evaluated if necessary (for
+            all of the other binary operators, both operands are always
+            evaluated). If the left operand of "&amp;&amp;" evaluates to
+            <i>false</i>, then the right operand is not evaluated (and
+            the value of the whole expression is <i>false</i>);
+            similarly, if the left operand of "||" evaluates to <i>true</i>,
+            then the right operand is not evaluated (and the value of
+            the whole expression is <i>true</i>). </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">In C-- (as in C++
+            and Java), two string literals are considered equal if they
+            contain the same sequence of characters. So for example, the
+            first two of the following expressions should evaluate to <i>false</i>
+            and the last two should evaluate to <i>true</i>:</font></p>
+        <dir><font face="Helvetica, Arial, sans-serif">"a" == "abc"<br>
+            "a" == "A"<br>
+            "a" == "a"<br>
+            "abc" == "abc"
+          </font></dir>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Boolean values
+            should be output as 1 for <i>true</i> and 0 for <i>false</i>
+            (and that is probably how you should represent them
+            internally as well). </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Boolean values
+            should also be input using 1 for <i>true</i> and 0 for <i>false</i>.
+          </font></p>
+      </li>
+    </ol>
+    <font face="Helvetica, Arial, sans-serif">
+      <em></em>
+    </font>
+    <h2 id="suggestions"><font face="Helvetica, Arial, sans-serif">Suggestions
+        for how to work on the project</font></h2>
+    <font face="Helvetica, Arial, sans-serif">
+    </font>
+    <ol class="style1">
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">update name
+            analysis or type checking to ensure that a main function is
+            declared. </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">update name
+            analysis so that the code generator can answer the following
+            questions:</font></p>
+        <ul>
+          <li><font face="Helvetica, Arial, sans-serif">Is an Id local
+              or global?</font></li>
+          <li><font face="Helvetica, Arial, sans-serif">If local, what
+              is its offset in its function's AR?</font></li>
+          <li><font face="Helvetica, Arial, sans-serif">For each
+              function, how many bytes of storage are needed for its
+              parameters, and how many are needed for its locals?</font></li>
+        </ul>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">try to implement
+            code generation for each of the following features (in the
+            order of appearance) and&nbsp; be sure to test each feature
+            one after each other as it is implemented:</font></p>
+        <ul>
+          <li><font face="Helvetica, Arial, sans-serif">global variable
+              declarations, function entry, and function exit (write a
+              test program that just declares some global variables and
+              a main function that does nothing)</font></li>
+          <li><font face="Helvetica, Arial, sans-serif"><font
+                face="Courier New, Courier, monospace">int</font> and <font
+                face="Courier New, Courier, monospace">bool</font>
+              literals (just push the value onto the stack), string
+              literals, and <font face="Courier New, Courier,
+                monospace">WriteStmtNode</font></font></li>
+          <li><font face="Helvetica, Arial, sans-serif"><font
+                face="Courier New, Courier, monospace">IdNode</font>
+              (code that pushes the value of the id onto the stack, and
+              code that pushes the address of the id onto the stack) and
+              assignments of the form <font face="Courier New, Courier,
+                monospace">id=literal</font> and <font face="Courier
+                New, Courier, monospace">id=id</font> (test by assigning
+              then writing)</font></li>
+          <li><font face="Helvetica, Arial, sans-serif">expressions
+              other than calls</font></li>
+          <li><font face="Helvetica, Arial, sans-serif">statements other
+              than calls and returns</font></li>
+          <li><font face="Helvetica, Arial, sans-serif">call statements
+              and expressions, return statements (to implement a
+              function call, you will need a third code-generation
+              method for the <font face="Courier New, Courier,
+                monospace">IdNode</font> class: one that is called only
+              for a function name and that generates a jump-and-link
+              instruction)</font></li>
+        </ul>
+        <p><b><font face="Helvetica, Arial, sans-serif">Implementing <font
+                face="Courier New, Courier, monospace">struct</font>
+              related code (<font face="Courier New, Courier, monospace">struct</font>
+              definition, <font face="Courier New, Courier, monospace">struct</font>
+              declaration, dot access) is NOT required!</font></b><br>
+        </p>
+        <ul>
+        </ul>
+      </li>
+    </ol>
+    <font face="Helvetica, Arial, sans-serif"></font><br>
+    <font face="Helvetica, Arial, sans-serif"></font>
+  </body>
+</html>
